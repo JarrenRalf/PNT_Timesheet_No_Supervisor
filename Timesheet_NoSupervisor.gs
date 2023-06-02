@@ -83,6 +83,8 @@ function calculateGoodFriday(year)
 */
 function createTriggers()
 {
+  SpreadsheetApp.getActive().getSheets().map(sheet => (sheet.getSheetName() === 'Timesheet_EmailCopy') ? sheet.hideSheet() : sheet.showSheet())
+
   ScriptApp.newTrigger('installedOnEdit').forSpreadsheet(SpreadsheetApp.getActive()).onEdit().create()
 
   ScriptApp.newTrigger("setHolidaysAndPayPeriodsAnnually").timeBased().onMonthDay(1).atHour(2).create();
@@ -150,6 +152,7 @@ function deleteAllTriggers()
 function deleteTriggers(...triggerHandles)
 {
   ScriptApp.getProjectTriggers().map(trigger => (triggerHandles.includes(trigger.getHandlerFunction())) ? ScriptApp.deleteTrigger(trigger) : '')
+  SpreadsheetApp.getActive().getSheets().map(sheet => sheet.showSheet()) // No sheets will remain hidden
 }
 
 /**
